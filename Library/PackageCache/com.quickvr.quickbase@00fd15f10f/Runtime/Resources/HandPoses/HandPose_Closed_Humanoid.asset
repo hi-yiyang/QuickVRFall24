@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87ddac07b2e31d341a75dac41ce7ea12, type: 3}
+  m_Name: HandPose_Closed_Humanoid
+  m_EditorClassIdentifier: 
+  _thumbPose:
+    _close0: -2.415
+    _close1: -0.795
+    _close2: -0.745
+    _separation: -0.945
+  _indexPose:
+    _close0: -0.815
+    _close1: -1.6
+    _close2: -0.716
+    _separation: -1.216
+  _middlePose:
+    _close0: -0.979
+    _close1: -1.445
+    _close2: -0.551
+    _separation: -1.402
+  _ringPose:
+    _close0: -1.011
+    _close1: -1.245
+    _close2: -0.484
+    _separation: 0.229
+  _littlePose:
+    _close0: -0.92
+    _close1: -0.999
+    _close2: -0.259
+    _separation: -0.397

@@ -1,0 +1,175 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.XR;
+
+namespace QuickVR
+{
+    public class QuickVRPlayArea : QuickXRRig
+    {
+
+        #region PUBLIC ATTRIBUTES
+
+        public static QuickVRPlayArea _instance = null;
+
+        #endregion
+
+        #region PROTECTED ATTRIBUTES
+
+        protected Vector3 _customUserForward = Vector3.zero;  //A custom user forward provided by the application. 
+
+        protected Dictionary<HumanBodyBones, float> _fingerLength = new Dictionary<HumanBodyBones, float>();
+
+        #endregion
+
+        #region CREATION AND DESTRUCTION
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            _instance = this;
+
+            for (HumanBodyBones boneID = HumanBodyBones.LeftThumbProximal; boneID <= HumanBodyBones.RightLittleProximal; boneID++)
+            {
+                _fingerLength[boneID] = 0;
+            }
+        }
+
+        #endregion
+
+        #region GET AND SET
+
+        public override Vector3 GetUserForward()
+        {
+            if (_customUserForward == Vector3.zero)
+            {
+                return base.GetUserForward();
+            }
+            return _customUserForward;
+        }
+
+        public virtual void SetUserForward(Vector3 fwd)
+        {
+            _customUserForward = fwd;
+        }
+
+        public virtual void ResetUserForward()
+        {
+            _customUserForward = Vector3.zero;
+        }
+
+        protected virtual bool IsNodeLeftSide(QuickVRNode vrNode)
+        {
+            QuickVRNode nodeHead = GetVRNode(HumanBodyBones.Head);
+            Vector3 fwd = Vector3.ProjectOnPlane(nodeHead.transform.forward, transform.up);
+            Vector3 v = Vector3.ProjectOnPlane(vrNode.transform.position - nodeHead.transform.position, transform.up);
+
+            return Vector3.SignedAngle(fwd, v, transform.up) < 0;
+        }
+
+        public virtual float GetFingerLength(QuickHumanFingers f, bool isLeft)
+        {
+            List<QuickHumanBodyBones> boneFingers = QuickHumanTrait.GetBonesFromFinger(f, isLeft);
+            HumanBodyBones boneID = (HumanBodyBones)boneFingers[0];
+            if (_fingerLength[boneID] == 0)
+            {
+                QuickVRNode n0 = GetVRNode(boneFingers[0]);
+                QuickVRNode n1 = GetVRNode(boneFingers[1]);
+                QuickVRNode n2 = GetVRNode(boneFingers[2]);
+
+                if (n0._isTracked && n1._isTracked && n2._isTracked)
+                {
+                    _fingerLength[boneID] = Vector3.Distance(n0.transform.position, n1.transform.position) + Vector3.Distance(n1.transform.position, n2.transform.position);
+                }
+            }
+
+            return _fingerLength[boneID];
+        } 
+
+        public virtual bool IsVRNodesSwaped(HumanBodyBones typeNodeLeft, HumanBodyBones typeNodeRight, bool doSwaping = true)
+        {
+            return IsVRNodesSwaped(GetVRNode(typeNodeLeft), GetVRNode(typeNodeRight), doSwaping);
+        }
+
+        public virtual bool IsVRNodesSwaped(QuickVRNode nodeLeft, QuickVRNode nodeRight, bool doSwaping = true)
+        {
+            bool result = false;
+
+            QuickVRNode hmdNode = GetVRNode(HumanBodyBones.Head);
+            if (hmdNode._isTracked && nodeLeft._isTracked && nodeRight._isTracked)
+            {
+                float dLeft = Vector3.Dot(nodeLeft.transform.position - hmdNode.transform.position, hmdNode.transform.right);
+                float dRight = Vector3.Dot(nodeRight.transform.position - hmdNode.transform.position, hmdNode.transform.right);
+
+                result = dLeft > dRight;
+                if (result && doSwaping)
+                {
+                    SwapQuickVRNode(nodeLeft, nodeRight);
+                }
+            }
+            
+            return result;
+        }
+
+        protected virtual void SwapQuickVRNode(QuickVRNode vrNodeA, QuickVRNode vrNodeB)
+        {
+            TrackedDevice deviceA = vrNodeA._inputDevice;
+            vrNodeA._inputDevice = vrNodeB._inputDevice;
+            vrNodeB._inputDevice = deviceA;
+        }
+
+        #endregion
+
+        #region DEBUG
+
+        protected override void OnDrawGizmos()
+        {
+            base.OnDrawGizmos();
+
+            //Gizmos.color = Color.green;
+            foreach (var pair in _vrNodes)
+            {
+                QuickVRNode n = pair.Value;
+                //if (n.IsTracked())
+                {
+                    DebugExtension.DrawCoordinatesSystem(n.transform.position, n.transform.right, n.transform.up, n.transform.forward, 0.05f);
+
+                    Gizmos.color = n._isTracked ? Color.blue : Color.yellow;
+
+                    float s = 0.0125f;
+                    Vector3 cSize = Vector3.one * s;
+                    
+                    Gizmos.matrix = n.transform.localToWorldMatrix;
+                    Gizmos.DrawCube(Vector3.zero, cSize);
+                    QuickTrackedObject tObject = n.GetTrackedObject();
+                    if (tObject.transform.localPosition != Vector3.zero)
+                    {
+                        Gizmos.DrawSphere(tObject.transform.localPosition, s * 0.5f);
+                        Gizmos.DrawLine(Vector3.zero, tObject.transform.localPosition);
+                    }
+                    Gizmos.matrix = Matrix4x4.identity;
+                }
+            }
+        }
+
+        #endregion
+
+        #region HELPERS
+
+        private static int CompareInputDevicesHeight(TrackedDevice deviceA, TrackedDevice deviceB)
+        {
+            Vector3 posA = deviceA.devicePosition.ReadValue();
+            Vector3 posB = deviceB.devicePosition.ReadValue();
+
+            return -posA.y.CompareTo(posB.y);
+        }
+
+        #endregion
+
+    }
+}
+
+

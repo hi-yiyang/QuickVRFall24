@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87ddac07b2e31d341a75dac41ce7ea12, type: 3}
+  m_Name: HandPose_Neutral_Humanoid
+  m_EditorClassIdentifier: 
+  _thumbPose:
+    _close0: -2.107
+    _close1: 0.193
+    _close2: 0.28
+    _separation: -0.898
+  _indexPose:
+    _close0: 0.457
+    _close1: 0.196
+    _close2: 0.474
+    _separation: -1.347
+  _middlePose:
+    _close0: 0.241
+    _close1: -0.118
+    _close2: 0.437
+    _separation: -2.695
+  _ringPose:
+    _close0: -0.097
+    _close1: 0.051
+    _close2: 0.337
+    _separation: 1.628
+  _littlePose:
+    _close0: -0.333
+    _close1: 0.269
+    _close2: 0.626
+    _separation: 0.262

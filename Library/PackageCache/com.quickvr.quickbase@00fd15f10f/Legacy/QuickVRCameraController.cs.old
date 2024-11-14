@@ -1,0 +1,136 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Dynamic;
+using UnityEngine;
+
+namespace QuickVR
+{
+
+    [DefaultExecutionOrder(-500)]
+    public class QuickVRCameraController : QuickXRRig
+    {
+
+        #region PUBLIC ATTRIBUTES
+
+        public LayerMask _visibleLayers = -1;	//The layers that will be rendered by the cameras of the head tracking system. 
+
+        public Camera _pfCamera = null;
+        public float _cameraNearPlane = DEFAULT_NEAR_CLIP_PLANE;
+        public float _cameraFarPlane = DEFAULT_FAR_CLIP_PLANE;
+
+        #endregion
+
+        #region PROTECTED ATTRIBUTES
+
+        protected static Camera _camera = null;
+
+        protected QuickIKManager _ikManager = null;
+
+        #endregion
+
+        #region CONSTANTS
+
+        public const float DEFAULT_NEAR_CLIP_PLANE = 0.05f;
+        public const float DEFAULT_FAR_CLIP_PLANE = 500.0f;
+
+        #endregion
+
+        #region CREATION AND DESTRUCTION
+
+        protected override void CreateVRNodes()
+        {
+            QuickVRNode vrNodeHead = CreateVRNode(QuickHumanBodyBones.Head);
+
+            if (!Camera.main)
+            {
+                Camera camera = _pfCamera ? Instantiate<Camera>(_pfCamera) : new GameObject().GetOrCreateComponent<Camera>();
+                camera.name = "__Camera__";
+                camera.tag = "MainCamera";
+                camera.gameObject.GetOrCreateComponent<FlareLayer>();
+            }
+
+            _camera = Camera.main;
+            _camera.transform.parent = vrNodeHead.transform;
+            _camera.transform.ResetTransformation();
+
+            _camera.GetOrCreateComponent<AudioListener>();
+
+            if (!QuickVRManager.IsXREnabled())
+            {
+                _camera.fieldOfView = 70.0f;//90.0f;
+            }
+        }
+
+        #endregion
+
+        #region GET AND SET
+
+        //public virtual void Align(Animator animator)
+        //{
+        //    //To avoid precision problems, make the Animator to be in the World origin.
+        //    Vector3 tmpPos = animator.transform.position;
+        //    Quaternion tmpRot = animator.transform.rotation;
+        //    animator.transform.position = Vector3.zero;
+        //    animator.transform.rotation = Quaternion.identity;
+
+        //    //Make the rig to be child of the Animator
+        //    Transform tmpParent = transform.parent;
+        //    transform.parent = animator.transform;
+        //    transform.ResetTransformation();
+        //    _trackingOffset.ResetTransformation();
+
+        //    //Rotate the rig so it is aligned with the Animator
+        //    QuickIKManager ikManager = animator.GetComponent<QuickIKManager>();
+
+        //    if (ikManager)
+        //    {
+        //        ikManager.UpdateTracking();
+
+        //        //Rotate the camera to match the forward of the avatar. 
+        //        Vector3 u = Vector3.ProjectOnPlane(GetUserForward(), transform.up).normalized;
+        //        Vector3 v = Vector3.ProjectOnPlane(ikManager.GetIKSolver(HumanBodyBones.Head)._targetLimb.transform.forward, transform.up);
+        //        float rotAngle = Vector3.Angle(u, v);
+        //        Vector3 rotAxis = Vector3.Cross(u, v);
+
+        //        _trackingOffset.Rotate(rotAxis, rotAngle, Space.World);
+        //    }
+
+        //    //Position the VRPlayArea so the VRHead is aligned with the EyeCenter
+        //    Vector3 pos = GetVRNode(HumanBodyBones.Head).transform.position;
+        //    Vector3 targetPos = animator.GetEyeCenterVR().position;
+        //    _trackingOffset.position += targetPos - pos;
+
+        //    //Restore the Target Avatar position and rotation
+        //    animator.transform.position = tmpPos;
+        //    animator.transform.rotation = tmpRot;
+
+        //    //Unbound the VRPlayArea parenting with the TargetAvatar
+        //    transform.parent = tmpParent;
+        //}
+
+        public static Camera GetCamera()
+        {
+            return _camera;
+        }
+
+        #endregion
+
+        #region UPDATE
+
+        public override void UpdateRig()
+        {
+            foreach (Camera cam in Camera.allCameras)
+            {
+                cam.nearClipPlane = _cameraNearPlane;
+                cam.farClipPlane = _cameraFarPlane;
+                cam.cullingMask = _visibleLayers.value;
+            }
+
+            base.UpdateRig();
+        }
+
+        #endregion
+
+    }
+
+}

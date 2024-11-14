@@ -1,0 +1,236 @@
+//using System.Collections;
+//using System.Collections.Generic;
+//using UnityEngine;
+
+//public class QuickVRPlayArea
+//{
+
+//    protected virtual List<TrackedDevice> GetBodyTrackers()
+//    {
+//        List<TrackedDevice> result = new List<TrackedDevice>();
+//        //InputSystem.devices
+//        //XRNode[] trackers = { XRNode.Head, XRNode.LeftHand, XRNode.RightHand, XRNode.HardwareTracker };
+//        //foreach (XRNode n in trackers)
+//        //{
+//        //    List<InputDevice> tmp = new List<InputDevice>();
+//        //    InputDevices.GetDevicesAtXRNode(n, tmp);
+//        //    result.AddRange(tmp);
+//        //}
+
+//        //result.Sort(CompareInputDevicesHeight);
+
+//        return result;
+//    }
+
+//    public virtual void Calibrate()
+//    {
+//        //POSSIBLE TRACKER CONFIGURATIONS
+
+//        //1     ->  Head
+//        //3     ->  Head + Hands
+//        //4     ->  Head + Hands + Hips
+//        //6     ->  Head + Hands + Hips + Feet
+//        //10    ->  Head + Hands + Hips + Feet + Elbows + Knees
+
+//        List<TrackedDevice> bodyTrackers = GetBodyTrackers();
+//        int numTrackers = bodyTrackers.Count;
+//        QuickVRManager.Log("NUM BODY TRACKERS = " + numTrackers);
+
+//        //Try to assign the default nodes for Head and Hands
+//        //QuickVRNode nodeHMD = GetVRNode(HumanBodyBones.Head);
+//        //QuickVRNode nodeLeftHand = GetVRNode(HumanBodyBones.LeftHand);
+//        //QuickVRNode nodeRightHand = GetVRNode(HumanBodyBones.RightHand);
+
+//        //nodeHMD._inputDevice = InputDevices.GetDeviceAtXRNode(XRNode.Head);
+//        //nodeLeftHand._inputDevice = InputDevices.GetDeviceAtXRNode(XRNode.LeftHand);
+//        //nodeRightHand._inputDevice = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
+
+//        if (numTrackers == 1 || numTrackers == 3 || numTrackers == 4 || numTrackers == 6 || numTrackers == 8 || numTrackers == 10)
+//        {
+//            InitHead(bodyTrackers);
+
+//            if (numTrackers == 3)
+//            {
+//                //Head + Hands
+//                InitHands(bodyTrackers.GetRange(1, 2));
+//            }
+//            else if (numTrackers == 4)
+//            {
+//                //Head + Hands + Hips
+//                InitHipsAndHands(bodyTrackers.GetRange(1, 3));
+//            }
+//            else if (numTrackers == 6)
+//            {
+//                //Head + Hands + Hips + Feet
+//                //1) Proceed as in the previous case
+//                InitHipsAndHands(bodyTrackers.GetRange(1, 3));
+
+//                //2) The Feet are the trackers with the lower y. 
+//                InitFeet(bodyTrackers.GetRange(4, 2));
+//            }
+//            else if (numTrackers == 8)
+//            {
+//                //Head + Hands + Hips + Feet + Elbows. 
+//                Debug.LogWarning(numTrackers + "NOT SUPPORTED YET!!!");
+//            }
+//            else if (numTrackers == 10)
+//            {
+//                //Head + Hands + Hips + Feet + Elbows + Knees. 
+//                Debug.LogWarning(numTrackers + "NOT SUPPORTED YET!!!");
+//            }
+//        }
+//        else
+//        {
+//            QuickVRManager.LogWarning("BAD NUMBER OF BODY TRACKERS!!!");
+//        }
+
+//        bool isHandsSwapped = IsVRNodesSwaped(HumanBodyBones.LeftHand, HumanBodyBones.RightHand);
+//        IsVRNodesSwaped(HumanBodyBones.LeftFoot, HumanBodyBones.RightFoot);
+//        QuickVRManager.Log("handsSwaped = " + isHandsSwapped);
+
+//        //foreach (HumanBodyBones t in QuickVRNode.GetTypeList())
+//        //{
+//        //    QuickVRNode n = GetVRNode(t);
+//        //    if (n) n.Calibrate();
+//        //}
+//    }
+
+//    //public virtual void Align(Animator animator)
+//    //{
+//    //    //RecomptueOriginOffset();
+
+//    //    //To avoid precision problems, make the Animator to be in the World origin.
+//    //    Vector3 tmpPos = animator.transform.position;
+//    //    Quaternion tmpRot = animator.transform.rotation;
+//    //    animator.transform.position = Vector3.zero;
+//    //    animator.transform.rotation = Quaternion.identity;
+
+//    //    //Make the rig to be child of the Animator
+//    //    Transform tmpParent = transform.parent;
+//    //    transform.parent = animator.transform;
+//    //    transform.ResetTransformation();
+//    //    _trackingOffset.ResetTransformation();
+
+//    //    //Rotate the rig so it is aligned with the Animator
+//    //    Vector3 fwd = GetUserForward().normalized;
+//    //    Vector3 targetFwd = animator.transform.forward;
+//    //    Vector3 rotAxis = Vector3.Cross(fwd, targetFwd);
+//    //    _trackingOffset.Rotate(rotAxis, Vector3.Angle(fwd, targetFwd), Space.World);
+
+//    //    //Position the VRPlayArea so the VRHead is aligned with the EyeCenter
+//    //    Vector3 pos = GetVRNode(HumanBodyBones.Head).transform.position;
+//    //    Vector3 targetPos = animator.GetEyeCenterVR().position;
+//    //    _trackingOffset.position += targetPos - pos;
+
+//    //    //Restore the Target Avatar position and rotation
+//    //    animator.transform.position = tmpPos;
+//    //    animator.transform.rotation = tmpRot;
+
+//    //    //Unbound the VRPlayArea parenting with the TargetAvatar
+//    //    transform.parent = tmpParent;
+//    //}
+
+//    protected virtual bool ValidateNumBodyTrackers(List<TrackedDevice> bodyTrackers, int numTrackers)
+//    {
+//        bool result = true;
+//        if (bodyTrackers.Count != numTrackers)
+//        {
+//            Debug.LogError("BODY TRACKERS LIST MUST CONTAIN EXACTLY " + numTrackers + " ELEMENTS");
+//            result = false;
+//        }
+
+//        return result;
+//    }
+
+//    protected virtual void InitHead(List<TrackedDevice> bodyTrackers)
+//    {
+//        QuickVRNode vrNodeHead = GetVRNode(HumanBodyBones.Head);
+//        vrNodeHead._inputDevice = InputSystem.GetDevice<XRHMD>();
+//        if (!vrNodeHead._inputDevice.IsValid())
+//        {
+//            //The head will always be the upper body tracker
+//            vrNodeHead._inputDevice = bodyTrackers[0];
+//        }
+//    }
+
+//    protected virtual void InitHipsAndHands(List<TrackedDevice> bodyTrackers)
+//    {
+//        if (ValidateNumBodyTrackers(bodyTrackers, 3))
+//        {
+//            //1) The hips is the node that is "in the middle", i.e., the hands are in opposite sides of the hips node.
+//            Vector3 pos0 = bodyTrackers[0].devicePosition.ReadValue();
+//            Vector3 pos1 = bodyTrackers[1].devicePosition.ReadValue();
+//            Vector3 pos2 = bodyTrackers[2].devicePosition.ReadValue();
+
+//            Vector3 scale = new Vector3(1, 0, 1);
+//            pos0 = Vector3.Scale(pos0, scale);
+//            pos1 = Vector3.Scale(pos1, scale);
+//            pos2 = Vector3.Scale(pos2, scale);
+
+//            QuickVRNode vrNodeHips = GetVRNode(HumanBodyBones.Hips);
+//            int hipsID;
+//            if (Vector3.Dot(pos1 - pos0, pos2 - pos0) < 0)
+//            {
+//                //0 is the hips tracker
+//                hipsID = 0;
+//            }
+//            else if (Vector3.Dot(pos0 - pos1, pos2 - pos1) < 0)
+//            {
+//                //1 is the hips tracker
+//                hipsID = 1;
+//            }
+//            else
+//            {
+//                //2 is the hips tracker
+//                hipsID = 2;
+//            }
+
+//            vrNodeHips._inputDevice = bodyTrackers[hipsID];
+
+//            //hipsID 
+//            List<TrackedDevice> handTrackers = new List<TrackedDevice>();
+//            for (int i = 0; i < 3; i++)
+//            {
+//                if (i != hipsID)
+//                {
+//                    handTrackers.Add(bodyTrackers[i]);
+//                }
+//            }
+
+//            InitHands(handTrackers);
+//        }
+//    }
+
+//    protected virtual void InitHands(List<TrackedDevice> bodyTrackers)
+//    {
+//        if (ValidateNumBodyTrackers(bodyTrackers, 2))
+//        {
+//            QuickVRNode vrNodeLeftHand = GetVRNode(HumanBodyBones.LeftHand);
+//            QuickVRNode vrNodeRightHand = GetVRNode(HumanBodyBones.RightHand);
+
+//            vrNodeLeftHand._inputDevice = XRController.leftHand;
+//            vrNodeRightHand._inputDevice = XRController.rightHand;
+
+//            if (!vrNodeLeftHand._inputDevice.IsValid())
+//            {
+//                vrNodeLeftHand._inputDevice = bodyTrackers[0];
+//            }
+//            if (!vrNodeRightHand._inputDevice.IsValid())
+//            {
+//                vrNodeRightHand._inputDevice = bodyTrackers[1];
+//            }
+//        }
+//    }
+
+//    protected virtual void InitFeet(List<TrackedDevice> bodyTrackers)
+//    {
+//        if (ValidateNumBodyTrackers(bodyTrackers, 2))
+//        {
+//            //Simply make an assumption. 
+//            GetVRNode(HumanBodyBones.LeftFoot)._inputDevice = bodyTrackers[0];
+//            GetVRNode(HumanBodyBones.RightFoot)._inputDevice = bodyTrackers[1];
+//        }
+//    }
+
+
+//}
