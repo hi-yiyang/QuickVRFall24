@@ -66,6 +66,7 @@
     <Compile Include="Assets\Samples\01_Workflow\Scripts\StageSpawnCube.cs" />
     <Compile Include="Assets\Samples\04_Interaction\Scripts\TestObjectSelected.cs" />
     <Compile Include="Assets\Samples\04_Interaction\Scripts\TestInteractionUI.cs" />
+    <Compile Include="Assets\Reversed Interactive\The Portal Collection\Scripts\SimpleCameraControllerPortals.cs" />
     <Compile Include="Assets\AQUAS-Lite\Scripts\AQUAS_Lite_Reflection.cs" />
     <Compile Include="Assets\Samples\04_Interaction\Scripts\Gun.cs" />
     <Compile Include="Assets\AQUAS-Lite\Scripts\AQUAS_Lite_CamNav.cs" />

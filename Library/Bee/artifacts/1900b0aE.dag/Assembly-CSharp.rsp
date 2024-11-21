@@ -396,6 +396,7 @@
 "Assets/AQUAS-Lite/Scripts/AQUAS_Lite_Camera.cs"
 "Assets/AQUAS-Lite/Scripts/AQUAS_Lite_CamNav.cs"
 "Assets/AQUAS-Lite/Scripts/AQUAS_Lite_Reflection.cs"
+"Assets/Reversed Interactive/The Portal Collection/Scripts/SimpleCameraControllerPortals.cs"
 "Assets/Samples/01_Workflow/Scripts/StageCheckIsCube.cs"
 "Assets/Samples/01_Workflow/Scripts/StageSpawnCube.cs"
 "Assets/Samples/01_Workflow/Scripts/StageSpawnSphere.cs"
