@@ -73,6 +73,7 @@
     <Compile Include="Assets\Samples\04_Interaction\Scripts\TestLocomotion.cs" />
     <Compile Include="Assets\Samples\04_Interaction\Scripts\SampleInteractionStage.cs" />
     <Compile Include="Assets\Samples\01_Workflow\Scripts\StageSpawnSphere.cs" />
+    <Compile Include="Assets\AAA\SceneSwitcher.cs" />
     <Compile Include="Assets\Samples\04_Interaction\Scripts\TestParentConstraint.cs" />
   </ItemGroup>
   <ItemGroup>

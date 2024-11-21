@@ -1,53 +1,49 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
-namespace QuickVR
+public class SceneSwitcher : MonoBehaviour
 {
-
-    public class QuickStageGroup : QuickStageBase
+    // Function to load an additive scene
+    public void LoadAdditiveScene(string sceneName)
     {
-
-        #region CREATION AND DESTRUCTION
-
-        protected override void Awake()
+        // Check if the scene is already loaded to avoid reloading it
+        if (!SceneManager.GetSceneByName(sceneName).isLoaded)
         {
-            base.Awake();
-
-            _avoidable = false;
+            SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
         }
-
-        #endregion
-
-        #region UPDATE
-
-        protected override IEnumerator CoUpdate()
-        {
-            QuickStageBase firstStage = null;
-            for (int i = 0; !firstStage && i < transform.childCount; i++)
-            {
-                Transform tChild = transform.GetChild(i);
-                if (tChild.gameObject.activeSelf)
-                {
-                    firstStage = tChild.GetComponent<QuickStageBase>();
-                }
-            }
-
-            if (firstStage)
-            {
-                firstStage.Init();
-            }
-            
-            while (GetTopStage() != this)
-            {
-                yield return null;
-            }
-        }
-
-        #endregion
-
     }
 
+    // Function to unload a scene
+    public void UnloadAdditiveScene(string sceneName)
+    {
+        // Unload the scene
+        if (SceneManager.GetSceneByName(sceneName).isLoaded)
+        {
+            SceneManager.UnloadSceneAsync(sceneName);
+        }
+    }
 }
 
+public class SceneController : MonoBehaviour
+{
+    // Reference to SceneSwitcher
+    public SceneSwitcher sceneSwitcher;
 
+    // Update is called once per frame
+    void Update()
+    {
+        // Check if the "D" key is pressed
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            // Load SceneA additively when the D key is pressed
+            sceneSwitcher.LoadAdditiveScene("Forest");
+        }
+
+        // Check if the "F" key is pressed
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            // Load SceneB additively when the F key is pressed
+            sceneSwitcher.LoadAdditiveScene("Mountain");
+        }
+    }
+}

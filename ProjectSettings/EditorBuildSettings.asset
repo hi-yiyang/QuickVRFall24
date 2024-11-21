@@ -8,6 +8,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Samples/01_Workflow/01_Workflow.unity
     guid: 7a4a7a8dbf8ec044393529acdc798aca
+  - enabled: 1
+    path: Assets/AAA/Forest_Day.unity
+    guid: 7769f33fb4fa2e5458344a36556ad760
+  - enabled: 1
+    path: Assets/AAA/Portal.unity
+    guid: 5b63972bed909c743ae924006923ea4a
+  - enabled: 1
+    path: Assets/AAA/Mountain_Night.unity
+    guid: e1118907227ce9744a7cf18c2710396e
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 29019afd4af420149952737aee2ddff9, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: adf860c9f92796046ae099cf29ae5973, type: 2}
