@@ -64,6 +64,7 @@
     <Compile Include="Assets\Samples\02_InputManager\InputManagerBodyPose.cs" />
     <Compile Include="Assets\Samples\02_InputManager\CharacterController.cs" />
     <Compile Include="Assets\Samples\01_Workflow\Scripts\StageSpawnCube.cs" />
+    <Compile Include="Assets\HAVE_CONTROL\VRPlayerMovement.cs" />
     <Compile Include="Assets\Samples\04_Interaction\Scripts\TestObjectSelected.cs" />
     <Compile Include="Assets\Samples\04_Interaction\Scripts\TestInteractionUI.cs" />
     <Compile Include="Assets\Reversed Interactive\The Portal Collection\Scripts\SimpleCameraControllerPortals.cs" />
@@ -72,9 +73,9 @@
     <Compile Include="Assets\AQUAS-Lite\Scripts\AQUAS_Lite_CamNav.cs" />
     <Compile Include="Assets\Samples\01_Workflow\Scripts\StageCheckIsCube.cs" />
     <Compile Include="Assets\Samples\04_Interaction\Scripts\TestLocomotion.cs" />
+    <Compile Include="Assets\HAVE_CONTROL\SceneSwitcher.cs" />
     <Compile Include="Assets\Samples\04_Interaction\Scripts\SampleInteractionStage.cs" />
     <Compile Include="Assets\Samples\01_Workflow\Scripts\StageSpawnSphere.cs" />
-    <Compile Include="Assets\AAA\SceneSwitcher.cs" />
     <Compile Include="Assets\Samples\04_Interaction\Scripts\TestParentConstraint.cs" />
   </ItemGroup>
   <ItemGroup>

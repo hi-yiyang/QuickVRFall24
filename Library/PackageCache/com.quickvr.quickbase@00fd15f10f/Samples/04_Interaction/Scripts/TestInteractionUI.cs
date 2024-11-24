@@ -92,10 +92,10 @@ namespace QuickVR.SampleInteraction
 
             //_toggleDirectMove.isOn = true;
             //_toggleDirectTurn.isOn = true;
-            //_toggleContinuousMove.isOn = true;
-            //_toggleContinuousTurn.isOn = true;
+            _toggleContinuousMove.isOn = true;
+            _toggleContinuousTurn.isOn = true;
             //_toggleWalkInPlace.isOn = true;
-            _toggleUIRayRightHand.isOn = true;
+            //_toggleUIRayRightHand.isOn = true;
 
             //_interactionManager.SetEnabledLocomotionSystem(QuickVRInteractionManager.DefaultLocomotionProvider.DirectTurn, true);
             //_interactionManager.SetEnabledLocomotionSystem(QuickVRInteractionManager.DefaultLocomotionProvider.WalkInPlace, true);

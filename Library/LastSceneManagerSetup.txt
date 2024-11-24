@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/AAA/Portal.unity
+- path: Assets/HAVE_NO_CONTROL/Forest_Day.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0

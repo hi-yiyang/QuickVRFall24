@@ -6,20 +6,21 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/AAA/Portal.unity
+    path: Assets/HAVE_CONTROL/Portal.unity
     guid: 5b63972bed909c743ae924006923ea4a
   - enabled: 1
-    path: Assets/AAA/Mountain_Night.unity
+    path: Assets/HAVE_CONTROL/Mountain_Night.unity
     guid: e1118907227ce9744a7cf18c2710396e
   - enabled: 1
-    path: Assets/AAA/Mountain_Day.unity
-    guid: b8ba9c8b8bdfdd840abcec3c1afbaf91
-  - enabled: 1
-    path: Assets/AAA/Forest_Day.unity
+    path: Assets/HAVE_CONTROL/Forest_Day.unity
     guid: 7769f33fb4fa2e5458344a36556ad760
   - enabled: 1
-    path: Assets/AAA/Forest_Sunset.unity
+    path: Assets/HAVE_CONTROL/Forest_Sunset.unity
     guid: b7c6bb2c3755f014a8b78f03137c903d
+  - enabled: 1
+    path: Assets/HAVE_CONTROL/Mountain_Day.unity
+    guid: e66f3f42b705cd040aecae2e15eaa617
   m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 17ef3da19eb1f7d4dbc2eb2d4afcc45b, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 29019afd4af420149952737aee2ddff9, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: adf860c9f92796046ae099cf29ae5973, type: 2}
